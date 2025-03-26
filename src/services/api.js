@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://localhost:7100/api";
+const API_URL = "appdemo3.azurewebsites.net";
 
 // clientes
 export const getClients = async () => {
