@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+vscode-remote//codespaces%2Bpsychic-trout-45q4xxgpg5xcw6j/workspaces/TISE-SAC/srcimport { useEffect, useState } from "react";
 import { 
   getClients, 
   getClientPaymentHistory, 
@@ -19,7 +19,8 @@ import {
 import DashboardCard from "../components/DashboardCard";
 import PaymentsChart from "../components/PaymentsChart";
 import ClientsTable from "../components/ClientsTable";
-import SideBar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
+
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -63,7 +64,6 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <SideBar className="w-64 flex-shrink-0" />
 
       {/* Contenido principal */}
