@@ -1,77 +1,82 @@
 import {
   ArrowPathIcon,
   CloudArrowUpIcon,
-  FingerPrintIcon,
+  CodeBracketIcon,
+  DevicePhoneMobileIcon,
   LockClosedIcon,
+  SignalIcon,
 } from "@heroicons/react/24/outline";
 
 const features = [
   {
-    name: "Despliegue Rápido",
+    name: "Desarrollo de software a medida",
     description:
-      "Implementamos soluciones con la mejor infraestructura para garantizar velocidad y estabilidad en cada proyecto.",
+      "Sistemas web y de escritorio alineados a tus procesos: ERP, CRM, portales y automatización de flujos internos.",
+    icon: CodeBracketIcon,
+  },
+  {
+    name: "Aplicaciones móviles",
+    description:
+      "Apps nativas e híbridas para equipos en campo, logística, ventas y atención al cliente con sincronización en tiempo real.",
+    icon: DevicePhoneMobileIcon,
+  },
+  {
+    name: "Telecomunicaciones e infraestructura",
+    description:
+      "Redes, conectividad y soporte técnico para operaciones estables, seguras y preparadas para escalar.",
+    icon: SignalIcon,
+  },
+  {
+    name: "Despliegue y cloud",
+    description:
+      "Arquitectura en la nube con despliegues ágiles, monitoreo y alta disponibilidad para tus servicios críticos.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: "Seguridad Avanzada",
+    name: "Ciberseguridad",
     description:
-      "Protegemos tus aplicaciones con cifrado SSL, autenticación segura y medidas de protección contra ataques.",
+      "SSL/TLS, autenticación robusta, respaldos y buenas prácticas OWASP para proteger datos y reputación.",
     icon: LockClosedIcon,
   },
   {
-    name: "Optimización Continua",
+    name: "Optimización y soporte",
     description:
-      "Analizamos y mejoramos el rendimiento de tu plataforma para una experiencia rápida y eficiente.",
+      "Mejora continua de rendimiento, capacitación de usuarios y mesa de ayuda con tiempos de respuesta garantizados.",
     icon: ArrowPathIcon,
-  },
-  {
-    name: "Tecnología Inteligente",
-    description:
-      "Desarrollamos soluciones con inteligencia artificial y automatización para optimizar tu negocio.",
-    icon: FingerPrintIcon,
   },
 ];
 
 export default function Features() {
   return (
-    <div className="bg-gradient-to-r cursor-default  from-black to-gray-900 py-24 sm:py-32 animate-fade-in">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold text-yellow-400 transition-transform duration-500 hover:scale-110">
-            TISE SAC - Innovación Digital
+    <section
+      id="servicios"
+      className="section-padding scroll-mt-28 border-section"
+      aria-labelledby="features-heading"
+    >
+      <div className="container-page">
+        <header className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-brand-500">Servicios</p>
+          <h2 id="features-heading" className="mt-2 text-3xl font-bold text-primary sm:text-4xl">
+            Tecnología integral para tu empresa
           </h2>
-          <p className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-balance transition-opacity duration-500 hover:opacity-80">
-            Transformamos tu negocio con tecnología de vanguardia
+          <p className="mt-4 text-muted">
+            Desde la consultoría inicial hasta el soporte post-lanzamiento, acompañamos cada etapa
+            del ciclo de vida digital de tu negocio.
           </p>
-          <p className="mt-6 text-lg text-gray-300 transition-all duration-500 hover:text-yellow-400">
-            En <strong className="text-white">TISE SAC</strong>, ofrecemos desarrollo web, aplicaciones y optimización digital con las herramientas más avanzadas del mercado.
-          </p>
-        </div>
+        </header>
 
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map((feature) => (
-              <div
-                key={feature.name}
-                className="relative pl-16 group transition-all duration-500 hover:scale-105 hover:shadow-lg hover:bg-gray-800 p-4 rounded-lg"
-              >
-                <dt className="text-lg font-semibold text-white flex items-center gap-2">
-                  <div className="absolute top-0 left-0 flex size-12 items-center justify-center rounded-lg bg-yellow-500 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-                    <feature.icon
-                      aria-hidden="true"
-                      className="size-6 text-black"
-                    />
-                  </div>
-                  {feature.name}
-                </dt>
-                <dd className="mt-2 text-base text-gray-300 transition-all duration-500 group-hover:text-yellow-300">
-                  {feature.description}
-                </dd>
+        <ul className="mx-auto mt-14 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
+          {features.map((feature) => (
+            <li key={feature.name} className="card-surface group p-6 transition hover:shadow-md">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-slate-900">
+                <feature.icon className="h-6 w-6" aria-hidden="true" />
               </div>
-            ))}
-          </dl>
-        </div>
+              <h3 className="mt-4 text-lg font-semibold text-primary">{feature.name}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{feature.description}</p>
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+    </section>
   );
 }

@@ -1,152 +1,172 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Dialog } from "@headlessui/react";
+import { useEffect, useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
+import { scrollToSection } from "../utils/scrollTo";
 
-export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const NAV_ITEMS = [
+  { id: "inicio", label: "Inicio" },
+  { id: "servicios", label: "Servicios" },
+  { id: "nosotros", label: "Nosotros" },
+  { id: "proyectos", label: "Proyectos" },
+  { id: "contacto", label: "Contacto" },
+];
+
+function NavItem({ id, label, className, onNavigate }) {
+  const handleClick = (e) => {
+    e.preventDefault();
+    scrollToSection(id);
+    onNavigate?.();
+  };
 
   return (
-    <header className="bg-[#111827] text-white shadow-lg border-b border-gray-700 fixed top-0 left-0 w-full z-20">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-        {/* LOGO */}
-        <div className="flex lg:flex-1">
-          <Link to="/" className="flex items-center space-x-3">
-            <img
-              src="../assets/img/logo.png"
-              alt="TISE SAC logo"
-              className="h-10 w-auto rounded-full"
-            />
-            <span className="text-lg font-semibold text-[#d8ac4d] transition-all duration-300 hover:scale-105">
-              TISE SAC
-            </span>
-          </Link>
+    <a href={`#${id}`} onClick={handleClick} className={className}>
+      {label}
+    </a>
+  );
+}
+
+export default function Navbar({ hasBanner = false }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeId, setActiveId] = useState("inicio");
+  const [scrolled, setScrolled] = useState(false);
+
+  const topOffset = hasBanner ? "top-11 sm:top-10" : "top-0";
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const sections = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(Boolean);
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target?.id) setActiveId(visible.target.id);
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5] }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash && NAV_ITEMS.some((n) => n.id === hash)) {
+      setTimeout(() => scrollToSection(hash), 80);
+    }
+  }, []);
+
+  const linkClass = (id) =>
+    `nav-link ${activeId === id ? "nav-link-active font-semibold" : ""}`;
+
+  return (
+    <header
+      className={`fixed ${topOffset} left-0 right-0 z-50 bg-navbar transition-[top,box-shadow] duration-300 ${
+        scrolled ? "shadow-md" : ""
+      }`}
+    >
+      <nav
+        className="container-page flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]"
+        aria-label="Navegación principal"
+      >
+        <a
+          href="#inicio"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection("inicio");
+          }}
+          className="shrink-0 rounded-lg"
+          aria-label="TISE SAC - Ir al inicio"
+        >
+          <Logo />
+        </a>
+
+        <ul className="hidden items-center gap-1 lg:flex" role="list">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.id}>
+              <NavItem
+                id={item.id}
+                label={item.label}
+                className={`${linkClass(item.id)} rounded-lg px-3 py-2`}
+              />
+            </li>
+          ))}
+        </ul>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <ThemeToggle />
+          <a
+            href="#contacto"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("contacto");
+            }}
+            className="btn-primary"
+          >
+            Contáctanos
+          </a>
         </div>
 
-        {/* MENÚ PARA ESCRITORIO */}
-        {/* MENÚ PARA ESCRITORIO */}
-        <div className="hidden lg:flex lg:gap-x-10">
-          <Link
-            to="/"
-            className="text-sm font-medium text-white hover:text-[#d8ac4d] transition-all duration-300 hover:scale-105"
-          >
-            Inicio
-          </Link>
-          <Link
-            to="/servicios"
-            className="text-sm font-medium text-white hover:text-[#d8ac4d] transition-all duration-300 hover:scale-105"
-          >
-            Servicios
-          </Link><Link
-            to="/AboutUs"
-            className="text-sm font-medium text-white hover:text-[#d8ac4d] transition-all duration-300 hover:scale-105"
-          >
-            Sobre Nosotros
-          </Link>
-          <Link
-            to="/proyectos"
-            className="text-sm font-medium text-white hover:text-[#d8ac4d] transition-all duration-300 hover:scale-105"
-          >
-            Proyectos
-          </Link>
-          <Link
-            to="/contacto"
-            className="text-sm font-medium text-white hover:text-[#d8ac4d] transition-all duration-300 hover:scale-105"
-          >
-            Contacto
-          </Link>
-        </div>
-
-        {/* BOTÓN DE LOGIN */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            to="/login"
-            className="bg-[#d8ac4d] text-gray-900 px-4 py-2 rounded-full text-sm font-semibold shadow-md hover:bg-yellow-500 transition-all duration-300 hover:scale-105"
-          >
-            Iniciar sesión
-          </Link>
-        </div>
-
-        {/* BOTÓN MENÚ MÓVIL */}
-        <div className="lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
           <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="text-white hover:text-[#d8ac4d] transition-all duration-300"
+            type="button"
+            className="rounded-lg p-2 text-muted hover:bg-black/5 dark:hover:bg-white/10"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Abrir menú"
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
         </div>
       </nav>
 
-      {/* MENÚ MÓVIL */}
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        className="lg:hidden"
-      >
-        {/* FONDO OSCURO DETRÁS DEL MENÚ */}
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 transition-opacity duration-300" />
-
-        {/* PANEL DEL MENÚ MÓVIL */}
-        <Dialog.Panel className="fixed inset-y-0 right-0 w-full max-w-sm bg-[#1a2332]/90 p-6 shadow-xl z-50 transform transition-transform duration-300 ease-in-out">
+      <Dialog open={mobileOpen} onClose={setMobileOpen} className="lg:hidden">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
+        <DialogPanel className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xs flex-col border-l bg-elevated p-6 shadow-2xl html.light:border-slate-200 html.dark:border-white/10">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-3">
-              <img
-                src="../assets/img/logo.png"
-                alt="TISE SAC"
-                className="h-10 w-auto rounded-full"
-              />
-              <span className="text-lg font-semibold text-[#d8ac4d] transition-all duration-300 hover:scale-105">
-                TISE SAC
-              </span>
-            </Link>
+            <Logo />
             <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-white hover:text-[#d8ac4d] transition-all duration-300 hover:scale-110"
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg p-2 text-muted"
+              aria-label="Cerrar menú"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
-
-          {/* MENÚ LINKS */}
-          {/* MENÚ LINKS */}
-          <div className="mt-6 space-y-4 text-center">
-            <Link
-              to="/"
-              className="block text-white text-lg font-medium py-2 rounded-md hover:bg-[#d8ac4d] hover:text-gray-900 transition-all duration-300 ease-in-out hover:scale-105"
-            >
-              Inicio
-            </Link>
-            <Link
-              to="/servicios"
-              className="block text-white text-lg font-medium py-2 rounded-md hover:bg-[#d8ac4d] hover:text-gray-900 transition-all duration-300 ease-in-out hover:scale-105"
-            >
-              Servicios
-            </Link>
-            <Link
-              to="/proyectos"
-              className="block text-white text-lg font-medium py-2 rounded-md hover:bg-[#d8ac4d] hover:text-gray-900 transition-all duration-300 ease-in-out hover:scale-105"
-            >
-              Proyectos
-            </Link>
-            <Link
-              to="/contacto"
-              className="block text-white text-lg font-medium py-2 rounded-md hover:bg-[#d8ac4d] hover:text-gray-900 transition-all duration-300 ease-in-out hover:scale-105"
-            >
-              Contacto
-            </Link>
-          </div>
-
-          {/* BOTÓN DE LOGIN */}
-          <div className="mt-6 text-center">
-            <Link
-              to="/login"
-              className="inline-block bg-[#d8ac4d] text-gray-900 py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:bg-yellow-500 transition-all duration-300 ease-in-out hover:scale-110"
-            >
-              Iniciar sesión
-            </Link>
-          </div>
-        </Dialog.Panel>
+          <ul className="mt-8 flex flex-1 flex-col gap-1" role="list">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.id}>
+                <NavItem
+                  id={item.id}
+                  label={item.label}
+                  onNavigate={() => setMobileOpen(false)}
+                  className={`block rounded-xl px-4 py-3 text-base ${linkClass(item.id)} html.light:hover:bg-slate-100 html.dark:hover:bg-white/10`}
+                />
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#contacto"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection("contacto");
+              setMobileOpen(false);
+            }}
+            className="btn-primary mt-4 w-full justify-center"
+          >
+            Contáctanos
+          </a>
+        </DialogPanel>
       </Dialog>
     </header>
   );

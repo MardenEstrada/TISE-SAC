@@ -1,114 +1,97 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const testimonials = [
   {
     id: 1,
     name: "Carlos Mendoza",
-    position: "Fundador de TechVision",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    position: "Fundador, TechVision",
     quote:
-      "Increíble servicio. Nos ayudaron a mejorar nuestra presencia digital y aumentar las ventas en un 40%.",
+      "TISE SAC modernizó nuestros procesos comerciales y la presencia digital. En seis meses aumentamos ventas un 40 % con una plataforma estable y fácil de usar.",
   },
   {
     id: 2,
     name: "Ana Torres",
-    position: "CEO de InnovateX",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    position: "CEO, InnovateX",
     quote:
-      "Una experiencia excelente. El equipo fue profesional, creativo y entregó resultados más allá de nuestras expectativas.",
+      "Profesionalismo, claridad en plazos y un equipo que entiende el negocio. Superaron expectativas en el rediseño de nuestra operación logística.",
   },
   {
     id: 3,
     name: "Ricardo López",
-    position: "Gerente de Nexus Solutions",
-    image: "https://randomuser.me/api/portraits/men/12.jpg",
+    position: "Gerente de Operaciones, Nexus Solutions",
     quote:
-      "Altamente recomendados. Su enfoque en la innovación y la atención al detalle realmente marcaron la diferencia.",
+      "La atención al detalle en seguridad y rendimiento marcó la diferencia. Hoy tenemos infraestructura confiable y soporte cercano cuando lo necesitamos.",
   },
 ];
 
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
-  const [animation, setAnimation] = useState("");
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAnimation("-translate-x-full opacity-0");
-      setTimeout(() => {
-        setIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-        setAnimation("translate-x-full opacity-0");
-        setTimeout(() => setAnimation("translate-x-0 opacity-100"), 100);
-      }, 400);
-    }, 5000);
-
-    return () => clearInterval(interval);
+  const goTo = useCallback((direction) => {
+    setIndex((prev) => (prev + direction + testimonials.length) % testimonials.length);
   }, []);
 
-  return (
-    <section className="flex justify-center items-center min-h-screen bg-gradient-to-r from-black to-gray-900 px-6 py-24 sm:py-32 lg:px-8">
-      <div className="relative max-w-4xl w-full bg-gray-900 px-12 py-20 shadow-2xl sm:rounded-3xl sm:px-20 md:py-24 text-center transition-all duration-500 hover:shadow-2xl overflow-hidden">
-        <svg
-          viewBox="0 0 1024 1024"
-          aria-hidden="true"
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 sm:top-1/2 sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0 size-[64rem] opacity-70 animate-pulse"
-        >
-          <circle
-            r={512}
-            cx={512}
-            cy={512}
-            fill="url(#gradient-dark)"
-            fillOpacity="0.65"
-          />
-          <defs>
-            <radialGradient id="gradient-dark">
-              <stop stopColor="#d8ac4d" />
-              <stop offset={1} stopColor="#223535" />
-            </radialGradient>
-          </defs>
-        </svg>
+  useEffect(() => {
+    const interval = setInterval(() => goTo(1), 7000);
+    return () => clearInterval(interval);
+  }, [goTo]);
 
-        {/* Contenido */}
-        <div className={`transition-transform duration-500 ${animation}`}>
-          <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl mb-6 hover:scale-105 transition-transform duration-500">
+  const current = testimonials[index];
+
+  return (
+    <section className="section-padding scroll-mt-28" aria-labelledby="testimonials-heading">
+      <div className="container-page">
+        <div className="card-surface mx-auto max-w-3xl p-8 sm:p-12">
+          <h2 id="testimonials-heading" className="text-center text-2xl font-bold text-primary sm:text-3xl">
             Lo que dicen nuestros clientes
           </h2>
-          <blockquote className="text-xl sm:text-2xl italic font-semibold text-gray-300 hover:text-yellow-300 transition-all duration-500">
-            <p>“{testimonials[index].quote}”</p>
-          </blockquote>
-          <figcaption className="mt-8 flex flex-col items-center">
-            <img
-              src={testimonials[index].image}
-              alt={testimonials[index].name}
-              className="size-16 rounded-full border-2 border-[#d8ac4d] shadow-lg transition-transform duration-500 hover:scale-110"
-            />
-            <div className="mt-3 text-lg font-semibold text-[#d8ac4d]">
-              {testimonials[index].name}
-            </div>
-            <div className="text-gray-400">{testimonials[index].position}</div>
-          </figcaption>
-        </div>
 
-        {/* Botones de navegación */}
-        <div className="mt-8 flex justify-center space-x-4">
-          {testimonials.map((_, i) => (
+          <figure className="mt-8 text-center" aria-live="polite">
+            <blockquote className="text-lg italic text-muted sm:text-xl">
+              <p>&ldquo;{current.quote}&rdquo;</p>
+            </blockquote>
+            <figcaption className="mt-6">
+              <cite className="not-italic">
+                <span className="block text-base font-semibold text-brand-500">{current.name}</span>
+                <span className="text-sm text-muted">{current.position}</span>
+              </cite>
+            </figcaption>
+          </figure>
+
+          <div className="mt-8 flex items-center justify-center gap-4">
             <button
-              key={i}
-              onClick={() => {
-                setAnimation("-translate-x-full opacity-0");
-                setTimeout(() => {
-                  setIndex(i);
-                  setAnimation("translate-x-full opacity-0");
-                  setTimeout(
-                    () => setAnimation("translate-x-0 opacity-100"),
-                    100
-                  );
-                }, 400);
-              }}
-              className={`h-4 w-4 rounded-full transition-colors ${
-                i === index ? "bg-yellow-500 scale-110" : "bg-gray-500"
-              } hover:bg-yellow-400`}
-            />
-          ))}
+              type="button"
+              onClick={() => goTo(-1)}
+              className="rounded-full border p-2 text-muted html.light:border-slate-200 html.light:hover:bg-slate-100 html.dark:border-white/10 html.dark:hover:bg-white/10"
+              aria-label="Testimonio anterior"
+            >
+              <ChevronLeftIcon className="h-5 w-5" />
+            </button>
+            <div className="flex gap-2" role="tablist" aria-label="Seleccionar testimonio">
+              {testimonials.map((t, i) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === index}
+                  aria-label={`Testimonio de ${t.name}`}
+                  onClick={() => setIndex(i)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    i === index ? "w-8 bg-brand-500" : "w-2.5 bg-slate-400/50"
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => goTo(1)}
+              className="rounded-full border p-2 text-muted html.light:border-slate-200 html.light:hover:bg-slate-100 html.dark:border-white/10 html.dark:hover:bg-white/10"
+              aria-label="Siguiente testimonio"
+            >
+              <ChevronRightIcon className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </section>

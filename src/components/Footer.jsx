@@ -1,41 +1,86 @@
-import { Link } from "react-router-dom";
+import Logo from "./Logo";
+import { scrollToSection } from "../utils/scrollTo";
+
+const footerLinks = [
+  { id: "inicio", label: "Inicio" },
+  { id: "servicios", label: "Servicios" },
+  { id: "nosotros", label: "Nosotros" },
+  { id: "proyectos", label: "Proyectos" },
+  { id: "contacto", label: "Contacto" },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 text-gray-800 shadow-sm rounded-t-lg">
-      <div className="w-full max-w-screen-xl mx-auto p-6 md:py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-center sm:text-left">
-          {/* Logo y Nombre */}
-          <a href="#" className="flex items-center justify-center sm:justify-start mb-4 sm:mb-0 space-x-3">
-            <img
-              src="../assets/img/logo.png"
-              className="h-10"
-              alt="TISE SAC Logo"
-            />
-            <span className="text-2xl font-semibold">TISE SAC</span>
-          </a>
+    <footer
+      id="contacto"
+      className="scroll-mt-28 border-t html.light:border-slate-200 html.light:bg-white html.dark:border-white/10 html.dark:bg-[#111827]"
+    >
+      <div className="container-page py-12 sm:py-16">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <a
+              href="#inicio"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("inicio");
+              }}
+              aria-label="TISE SAC - Inicio"
+            >
+              <Logo />
+            </a>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+              Tecnología, Innovación y Soluciones Empresariales. Empresa peruana especializada en
+              software, telecomunicaciones y transformación digital.
+            </p>
+            <address className="mt-6 space-y-2 text-sm not-italic text-muted">
+              <p>
+                <span className="font-medium text-primary">Dirección:</span> San Isidro, Lima, Perú
+              </p>
+              <p>
+                <span className="font-medium text-primary">Correo:</span>{" "}
+                <a href="mailto:contacto@tisesac.com" className="text-brand-500 hover:underline">
+                  contacto@tisesac.com
+                </a>
+              </p>
+              <p>
+                <span className="font-medium text-primary">Horario:</span> Lun–Vie, 9:00 – 18:00
+              </p>
+            </address>
+          </div>
 
-          {/* Enlaces */}
-          <ul className="grid grid-cols-2 sm:flex sm:space-x-6 text-sm font-medium">
-            {["Sobre nosotros", "Política de privacidad", "Servicios", "Contáctanos"].map((item, index) => (
-              <li key={index} className="mb-2 sm:mb-0">
-                <a href="#" className="hover:text-[#d8ac4d]">{item}</a>
-              </li>
-            ))}
-          </ul>
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
+              Navegación
+            </h3>
+            <nav className="mt-4" aria-label="Enlaces del pie de página">
+              <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {footerLinks.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(item.id);
+                      }}
+                      className="text-sm text-muted transition hover:text-brand-500"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <a href="#contacto" className="btn-primary mt-8 inline-flex">
+              Escríbenos
+            </a>
+          </div>
         </div>
 
-        {/* Línea divisoria */}
-        <hr className="my-6 border-gray-300 sm:mx-auto lg:my-8" />
+        <hr className="my-8 html.light:border-slate-200 html.dark:border-white/10" />
 
-        {/* Derechos reservados */}
-        <span className="block text-sm text-center">
-          © {new Date().getFullYear()}{" "}
-          <Link to="/" className="text-[#d8ac4d] hover:underline">
-            TISE SAC™
-          </Link>
-          . Todos los derechos reservados.
-        </span>
+        <p className="text-center text-sm text-muted sm:text-left">
+          © {new Date().getFullYear()} TISE SAC. Todos los derechos reservados.
+        </p>
       </div>
     </footer>
   );

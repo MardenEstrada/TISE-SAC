@@ -1,36 +1,32 @@
 const stats = [
-  { id: 1, name: 'Transacciones diarias procesadas', value: '2.5 millones' },
-  { id: 2, name: 'Clientes activos en nuestra plataforma', value: '850,000+' },
-  { id: 3, name: 'Empresas que confían en nosotros', value: '3,200+' },
+  { name: "Proyectos completados", value: "80+" },
+  { name: "Clientes activos", value: "150+" },
+  { name: "Profesionales en el equipo", value: "25+" },
+  { name: "Sectores atendidos", value: "12+" },
 ];
 
 export default function Stats() {
   return (
-    <div className="bg-gradient-to-r from-black to-gray-900 py-28 sm:py-36">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* TÍTULO MEJORADO */}
-        <h2 className="text-center text-3xl sm:text-4xl font-bold text-yellow-400 animate-fade-up">
-          Impacto en cifras
-        </h2>
-        <p className="mt-5 text-center text-lg text-gray-300 max-w-2xl mx-auto animate-fade-up">
-          Estos números reflejan la confianza y el crecimiento de nuestra comunidad.
-        </p>
+    <section className="section-padding border-section html.light:bg-slate-100/80 html.dark:bg-[#111827]/50" aria-labelledby="stats-heading">
+      <div className="container-page">
+        <header className="mx-auto max-w-2xl text-center">
+          <h2 id="stats-heading" className="text-3xl font-bold text-primary sm:text-4xl">
+            Resultados en <span className="text-gradient">cifras</span>
+          </h2>
+          <p className="mt-4 text-muted">
+            Indicadores que reflejan la confianza de nuestros clientes y la calidad de nuestra entrega.
+          </p>
+        </header>
 
-        {/* Contenedor de estadísticas con efecto de resalte */}
-        <dl className="grid grid-cols-1 gap-x-10 gap-y-16 text-center mt-14 lg:grid-cols-3">
+        <dl className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
-            <div
-              key={stat.id}
-              className="mx-auto flex max-w-xs flex-col gap-y-4 p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:brightness-125"
-            >
-              <dt className="text-lg text-gray-400">{stat.name}</dt>
-              <dd className="order-first text-4xl font-bold tracking-tight text-yellow-400 sm:text-5xl">
-                {stat.value}
-              </dd>
+            <div key={stat.name} className="card-surface p-6 text-center">
+              <dt className="text-sm text-muted">{stat.name}</dt>
+              <dd className="mt-2 text-4xl font-bold text-brand-500">{stat.value}</dd>
             </div>
           ))}
         </dl>
       </div>
-    </div>
+    </section>
   );
 }

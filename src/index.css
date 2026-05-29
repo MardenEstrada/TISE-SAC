@@ -1,1 +1,215 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-200: #fde68a;
+  --color-brand-300: #fcd34d;
+  --color-brand-400: #fbbf24;
+  --color-brand-500: #f59e0b;
+  --color-brand-600: #d97706;
+  --color-brand-700: #b45309;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply font-sans antialiased transition-colors duration-300;
+  }
+
+  html.light body {
+    @apply bg-slate-50 text-slate-900;
+  }
+
+  html.dark body {
+    @apply bg-[#0b1220] text-slate-100;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+
+  html.dark ::selection {
+    @apply bg-brand-500/40 text-white;
+  }
+
+  html.light ::selection {
+    @apply bg-brand-200 text-slate-900;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .card-surface {
+    @apply rounded-2xl border backdrop-blur-sm transition-colors duration-300;
+  }
+
+  html.light .card-surface {
+    @apply border-slate-200 bg-white shadow-sm;
+  }
+
+  html.dark .card-surface {
+    @apply border-white/10 bg-white/5;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600 bg-clip-text text-transparent;
+  }
+
+  .text-muted {
+    @apply transition-colors duration-300;
+  }
+
+  html.light .text-muted {
+    @apply text-slate-600;
+  }
+
+  html.dark .text-muted {
+    @apply text-slate-400;
+  }
+
+  .text-primary {
+    @apply transition-colors duration-300;
+  }
+
+  html.light .text-primary {
+    @apply text-slate-900;
+  }
+
+  html.dark .text-primary {
+    @apply text-white;
+  }
+
+  .border-section {
+    @apply border-t transition-colors duration-300;
+  }
+
+  html.light .border-section {
+    @apply border-slate-200;
+  }
+
+  html.dark .border-section {
+    @apply border-white/5;
+  }
+
+  .bg-elevated {
+    @apply transition-colors duration-300;
+  }
+
+  html.light .bg-elevated {
+    @apply bg-white;
+  }
+
+  html.dark .bg-elevated {
+    @apply bg-[#111827];
+  }
+
+  .bg-navbar {
+    @apply backdrop-blur-xl transition-all duration-300;
+  }
+
+  html.light .bg-navbar {
+    @apply border-slate-200/80 bg-white/90 shadow-sm;
+  }
+
+  html.dark .bg-navbar {
+    @apply border-white/10 bg-[#0b1220]/85;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-brand-500/25 transition hover:bg-brand-400;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition;
+  }
+
+  html.light .btn-secondary {
+    @apply border-slate-300 bg-white text-slate-800 hover:border-brand-400 hover:bg-slate-50;
+  }
+
+  html.dark .btn-secondary {
+    @apply border-white/20 bg-white/5 text-white hover:border-brand-400/50 hover:bg-white/10;
+  }
+
+  .nav-link {
+    @apply relative text-sm font-medium transition-colors duration-200;
+  }
+
+  html.light .nav-link {
+    @apply text-slate-600 hover:text-brand-600;
+  }
+
+  html.dark .nav-link {
+    @apply text-slate-300 hover:text-brand-400;
+  }
+
+  .nav-link-active {
+    @apply text-brand-500;
+  }
+
+  html.light .nav-link-active {
+    @apply text-brand-600;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
